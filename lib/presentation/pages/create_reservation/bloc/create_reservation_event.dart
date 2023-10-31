@@ -4,8 +4,36 @@ abstract class CreateReservationEvent {
   const CreateReservationEvent();
 }
 
-class NewReservationEvent extends CreateReservationEvent {
-  const NewReservationEvent({required this.reservationModel});
+class LoadCourtsEvent extends CreateReservationEvent {}
 
-  final ReservationModel reservationModel;
+class LoadWeatherReportEvent extends CreateReservationEvent {}
+
+class UpdateValuesEvent extends CreateReservationEvent {
+  UpdateValuesEvent({
+    this.courtId,
+    this.courtName,
+    this.courtImage,
+    this.reservationDate,
+    this.reservationTime,
+    this.precipitationProbability,
+    this.maxTemp,
+    this.minTemp,
+  });
+
+  int? courtId;
+  String? courtName;
+  String? courtImage;
+  DateTime? reservationDate;
+  int? reservationTime;
+  int? precipitationProbability;
+  double? maxTemp;
+  double? minTemp;
+}
+
+class AddReservationEvent extends CreateReservationEvent {
+  const AddReservationEvent({
+    required this.userName,
+  });
+
+  final String userName;
 }

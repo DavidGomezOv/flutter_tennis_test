@@ -11,10 +11,13 @@ class CourtModel extends HiveObject {
   final double lat;
   @HiveField(3)
   final double lng;
+  @HiveField(4)
+  final String imageUrl;
 
   CourtModel({
     required this.name,
     required this.lat,
     required this.lng,
+    required this.imageUrl,
   });
 }

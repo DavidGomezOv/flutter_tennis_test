@@ -17,18 +17,20 @@ class ReservationModelAdapter extends TypeAdapter<ReservationModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ReservationModel(
-      dateOfReservation: fields[1] as DateTime,
+      dateOfReservation: fields[1] as DateTime?,
       hoursOfReservation: fields[2] as int,
       courtId: fields[3] as int,
-      userName: fields[4] as String,
-      precipitationPercentage: fields[5] as int,
+      courtName: fields[4] as String,
+      courtImageUrl: fields[5] as String,
+      userName: fields[6] as String,
+      precipitationProbability: fields[7] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, ReservationModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(1)
       ..write(obj.dateOfReservation)
       ..writeByte(2)
@@ -36,9 +38,13 @@ class ReservationModelAdapter extends TypeAdapter<ReservationModel> {
       ..writeByte(3)
       ..write(obj.courtId)
       ..writeByte(4)
-      ..write(obj.userName)
+      ..write(obj.courtName)
       ..writeByte(5)
-      ..write(obj.precipitationPercentage);
+      ..write(obj.courtImageUrl)
+      ..writeByte(6)
+      ..write(obj.userName)
+      ..writeByte(7)
+      ..write(obj.precipitationProbability);
   }
 
   @override
