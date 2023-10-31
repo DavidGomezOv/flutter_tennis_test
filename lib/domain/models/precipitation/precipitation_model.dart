@@ -1,8 +1,8 @@
-class PrecipitationModel {
+class WeatherModel {
   List<HourlyData>? hourlyData;
   List<DailyData>? dailyData;
 
-  PrecipitationModel({
+  WeatherModel({
     this.hourlyData,
     this.dailyData,
   });

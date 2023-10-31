@@ -6,21 +6,27 @@ part 'reservation_model.g.dart';
 class ReservationModel extends HiveObject {
   int? id;
   @HiveField(1)
-  final DateTime dateOfReservation;
+  final DateTime? dateOfReservation;
   @HiveField(2)
   final int hoursOfReservation;
   @HiveField(3)
   final int courtId;
   @HiveField(4)
-  final String userName;
+  final String courtName;
   @HiveField(5)
-  final int precipitationPercentage;
+  final String courtImageUrl;
+  @HiveField(6)
+  final String userName;
+  @HiveField(7)
+  final int precipitationProbability;
 
   ReservationModel({
     required this.dateOfReservation,
     required this.hoursOfReservation,
     required this.courtId,
+    required this.courtName,
+    required this.courtImageUrl,
     required this.userName,
-    required this.precipitationPercentage,
+    required this.precipitationProbability,
   });
 }
