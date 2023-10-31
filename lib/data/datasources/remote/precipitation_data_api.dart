@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_tennis_test/core/helpers/network_helper.dart';
 import 'package:flutter_tennis_test/data/models/precipitation_response_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,7 @@ class PrecipitationDataApi {
     required double lat,
     required double lng,
   }) async {
-    await _validateConnection();
+    await NetworkHelper().validateConnection();
     final response = await http
         .get(_buildUrl(lat, lng))
         .timeout(const Duration(seconds: 30))
@@ -24,14 +25,6 @@ class PrecipitationDataApi {
     } else {
       throw ('Error! Status code: ${response.statusCode}');
     }
-  }
-
-  Future<bool> _validateConnection() async {
-    final connectivity = await Connectivity().checkConnectivity();
-    if (connectivity == ConnectivityResult.none) {
-      throw ('No internet connection');
-    }
-    return connectivity != ConnectivityResult.none;
   }
 
   Uri _buildUrl(double lat, double lng) {

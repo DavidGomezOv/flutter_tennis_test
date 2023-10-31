@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_tennis_test/core/extensions/generic_extensions.dart';
+import 'package:flutter_tennis_test/core/helpers/network_helper.dart';
 import 'package:flutter_tennis_test/domain/models/precipitation/precipitation_model.dart';
 import 'package:flutter_tennis_test/domain/models/precipitation/weather_model.dart';
 import 'package:flutter_tennis_test/domain/models/reservation/court_model.dart';
@@ -125,6 +126,10 @@ class CreateReservationBloc
 
   Future<void> _getCourtsData(Emitter<CreateReservationState> emit) async {
     emit(const LoadingState());
+
+    await NetworkHelper().validateConnection().catchError((error) {
+      emit(ErrorState(errorMessage: error.toString()));
+    });
 
     await reservationsRepository.getCourts().then((courts) {
       if (courts.isNotEmpty) {
