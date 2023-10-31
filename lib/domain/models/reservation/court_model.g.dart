@@ -20,19 +20,22 @@ class CourtModelAdapter extends TypeAdapter<CourtModel> {
       name: fields[1] as String,
       lat: fields[2] as double,
       lng: fields[3] as double,
+      imageUrl: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, CourtModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
       ..write(obj.lat)
       ..writeByte(3)
-      ..write(obj.lng);
+      ..write(obj.lng)
+      ..writeByte(4)
+      ..write(obj.imageUrl);
   }
 
   @override

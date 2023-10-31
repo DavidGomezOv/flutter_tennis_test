@@ -9,28 +9,26 @@ part of 'precipitation_response_model.dart';
 PrecipitationResponseModel _$PrecipitationResponseModelFromJson(
         Map<String, dynamic> json) =>
     PrecipitationResponseModel(
-      hourly: json['hourly'] == null
-          ? null
-          : Hourly.fromJson(json['hourly'] as Map<String, dynamic>),
-      daily: json['daily'] == null
-          ? null
-          : Daily.fromJson(json['daily'] as Map<String, dynamic>),
+      hourly: Hourly.fromJson(json['hourly'] as Map<String, dynamic>),
+      daily: Daily.fromJson(json['daily'] as Map<String, dynamic>),
     );
 
 Hourly _$HourlyFromJson(Map<String, dynamic> json) => Hourly(
-      time: (json['time'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      time: (json['time'] as List<dynamic>).map((e) => e as String).toList(),
       precipitationProbability:
-          (json['precipitationProbability'] as List<dynamic>?)
-              ?.map((e) => e as int)
+          (json['precipitation_probability'] as List<dynamic>)
+              .map((e) => e as int)
               .toList(),
     );
 
 Daily _$DailyFromJson(Map<String, dynamic> json) => Daily(
-      time: (json['time'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      temperature2mMax: (json['temperature2mMax'] as List<dynamic>?)
-          ?.map((e) => (e as num).toDouble())
-          .toList(),
-      temperature2mMin: (json['temperature2mMin'] as List<dynamic>?)
-          ?.map((e) => (e as num).toDouble())
-          .toList(),
+      time: (json['time'] as List<dynamic>).map((e) => e as String).toList(),
+      apparentTemperatureMax:
+          (json['apparent_temperature_max'] as List<dynamic>)
+              .map((e) => (e as num).toDouble())
+              .toList(),
+      apparentTemperatureMin:
+          (json['apparent_temperature_min'] as List<dynamic>)
+              .map((e) => (e as num).toDouble())
+              .toList(),
     );

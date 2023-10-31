@@ -16,8 +16,18 @@ class SuccessState extends ReservationsState {
   final List<ReservationModel> reservations;
 }
 
+class SuccessDeleteState extends ReservationsState {
+  const SuccessDeleteState();
+}
+
 class ErrorState extends ReservationsState {
   const ErrorState({required this.errorMessage});
 
   final String errorMessage;
+}
+
+class ShowReservationDetailState extends ReservationsState {
+  const ShowReservationDetailState({required this.reservationModel});
+
+  final ReservationModel reservationModel;
 }
