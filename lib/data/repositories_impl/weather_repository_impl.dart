@@ -1,12 +1,12 @@
-import 'package:flutter_tennis_test/data/datasources/remote/precipitation_data_api.dart';
+import 'package:flutter_tennis_test/data/datasources/remote/weather_data_api.dart';
 import 'package:flutter_tennis_test/data/models/precipitation_response_model.dart';
 import 'package:flutter_tennis_test/domain/models/precipitation/precipitation_model.dart';
-import 'package:flutter_tennis_test/domain/repositories/precipitation_repository.dart';
+import 'package:flutter_tennis_test/domain/repositories/weather_repository.dart';
 
-class PrecipitationRepositoryImpl implements PrecipitationRepository {
-  final PrecipitationDataApi precipitationDataApi;
+class WeatherRepositoryImpl implements WeatherRepository {
+  final WeatherDataApi weatherDataApi;
 
-  PrecipitationRepositoryImpl({required this.precipitationDataApi});
+  WeatherRepositoryImpl({required this.weatherDataApi});
 
   @override
   Future<WeatherModel> getWeatherData({
@@ -14,7 +14,7 @@ class PrecipitationRepositoryImpl implements PrecipitationRepository {
     required double lng,
   }) async {
     final result =
-        await precipitationDataApi.getWeatherData(lat: lat, lng: lng);
+        await weatherDataApi.getWeatherData(lat: lat, lng: lng);
     return WeatherModel(
       hourlyData: _mapHourlyData(result.hourly),
       dailyData: _mapDailyData(result.daily),

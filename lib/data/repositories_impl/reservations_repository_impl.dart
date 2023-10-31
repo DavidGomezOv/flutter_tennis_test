@@ -14,16 +14,17 @@ class ReservationsRepositoryImpl implements ReservationsRepository {
 
   @override
   Future<void> deleteReservation({required int reservationId}) =>
-      reservationLocalSource.deleteReservation(reservationId);
+      reservationLocalSource.deleteReservation(reservationId: reservationId);
 
   @override
   Future<void> createReservation(
           {required ReservationModel reservationModel}) =>
-      reservationLocalSource.createReservation(reservationModel);
+      reservationLocalSource.createReservation(
+          reservationModel: reservationModel);
 
   @override
   Future<CourtModel?> getCourtDetail({required int courtId}) =>
-      reservationLocalSource.getCourtData(courtId);
+      reservationLocalSource.getCourtData(id: courtId);
 
   @override
   Future<List<CourtModel>> getCourts() => reservationLocalSource.getCourts();

@@ -20,4 +20,23 @@ class CourtModel extends HiveObject {
     required this.lng,
     required this.imageUrl,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CourtModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          lat == other.lat &&
+          lng == other.lng &&
+          imageUrl == other.imageUrl;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      lat.hashCode ^
+      lng.hashCode ^
+      imageUrl.hashCode;
 }

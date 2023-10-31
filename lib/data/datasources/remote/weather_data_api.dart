@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_tennis_test/core/helpers/network_helper.dart';
 import 'package:flutter_tennis_test/data/models/precipitation_response_model.dart';
 import 'package:http/http.dart' as http;
 
-class PrecipitationDataApi {
+class WeatherDataApi {
   final String baseUrl = 'api.open-meteo.com';
   final String basePath = '/v1/forecast';
 
