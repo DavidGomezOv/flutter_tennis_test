@@ -67,6 +67,14 @@ class DetailReservationDialog extends StatelessWidget {
             'Precipitation Probability: ${reservationModel.precipitationProbability}%',
             style: const TextStyle(overflow: TextOverflow.ellipsis),
           ),
+          Text(
+            'High Temp: ${reservationModel.maxTemp}%',
+            style: const TextStyle(overflow: TextOverflow.ellipsis),
+          ),
+          Text(
+            'Low Temp: ${reservationModel.minTemp}%',
+            style: const TextStyle(overflow: TextOverflow.ellipsis),
+          ),
         ],
       ),
       actions: [

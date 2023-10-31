@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tennis_test/domain/models/reservation/court_model.dart';
-import 'package:flutter_tennis_test/domain/repositories/precipitation_repository.dart';
+import 'package:flutter_tennis_test/domain/repositories/weather_repository.dart';
 import 'package:flutter_tennis_test/domain/repositories/reservations_repository.dart';
 import 'package:flutter_tennis_test/presentation/pages/create_reservation/bloc/create_reservation_bloc.dart';
 import 'package:flutter_tennis_test/presentation/pages/create_reservation/widgets/button_list_widget.dart';
@@ -18,7 +18,7 @@ class CreateReservationPage extends StatelessWidget {
     return BlocProvider<CreateReservationBloc>(
       create: (context) => CreateReservationBloc(
         reservationsRepository: context.read<ReservationsRepository>(),
-        precipitationRepository: context.read<PrecipitationRepository>(),
+        weatherRepository: context.read<WeatherRepository>(),
       )..add(LoadCourtsEvent()),
       child: Scaffold(
         appBar: AppBar(
@@ -35,6 +35,10 @@ class CreateReservationPage extends StatelessWidget {
           listener: (context, state) {
             if (state is SuccessState) {
               Navigator.pushNamed(context, Routes.reservations);
+            }
+            if (state is UpdateValuesState && state.validationError != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error! ${state.validationError}')));
             }
           },
           child: const _Body(),

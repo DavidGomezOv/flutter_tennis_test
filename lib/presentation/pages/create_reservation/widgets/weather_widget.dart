@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tennis_test/core/extensions/generic_extensions.dart';
-import 'package:flutter_tennis_test/domain/models/precipitation/weather_model.dart';
+import 'package:flutter_tennis_test/domain/models/precipitation/daily_weather_model.dart';
 import 'package:flutter_tennis_test/presentation/pages/create_reservation/bloc/create_reservation_bloc.dart';
 
 class WeatherWidget extends StatelessWidget {
@@ -13,8 +13,7 @@ class WeatherWidget extends StatelessWidget {
       builder: (context, state) {
         DailyWeatherData? dailyWeatherModel;
         if (state is LoadedWeatherReportState) {
-          dailyWeatherModel =
-              (state).dailyWeatherData;
+          dailyWeatherModel = (state).dailyWeatherData;
           context.read<CreateReservationBloc>().add(
                 UpdateValuesEvent(
                   precipitationProbability:
@@ -24,12 +23,9 @@ class WeatherWidget extends StatelessWidget {
                 ),
               );
         } else if (state is UpdateValuesState) {
-          if ((state).maxTemperature == null ||
-              (state).minTemperature == null) {
-            return (state)
-                        .reservationModel
-                        .dateOfReservation ==
-                    null
+          if ((state).reservationModel.maxTemp == null ||
+              (state).reservationModel.minTemp == null) {
+            return (state).reservationModel.dateOfReservation == null
                 ? const SizedBox.shrink()
                 : Container(
                     height: 80,
@@ -46,11 +42,10 @@ class WeatherWidget extends StatelessWidget {
                   );
           }
           dailyWeatherModel = DailyWeatherData(
-            precipitationProbability: (state)
-                .reservationModel
-                .precipitationProbability,
-            maxTemperature: (state).maxTemperature,
-            minTemperature: (state).minTemperature,
+            precipitationProbability:
+                (state).reservationModel.precipitationProbability,
+            maxTemperature: (state).reservationModel.maxTemp,
+            minTemperature: (state).reservationModel.minTemp,
           );
         }
         if (dailyWeatherModel == null) {
@@ -98,12 +93,20 @@ class WeatherWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'High. Temp: ${dailyWeatherModel.maxTemperature?.toString()}',
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    'High Temp: ${dailyWeatherModel.maxTemperature?.toString()}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
-                    'Low. Temp: ${dailyWeatherModel.minTemperature?.toString()}',
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    'Low Temp: ${dailyWeatherModel.minTemperature?.toString()}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

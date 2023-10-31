@@ -24,13 +24,15 @@ class ReservationModelAdapter extends TypeAdapter<ReservationModel> {
       courtImageUrl: fields[5] as String,
       userName: fields[6] as String,
       precipitationProbability: fields[7] as int,
+      maxTemp: fields[8] as double?,
+      minTemp: fields[9] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ReservationModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(1)
       ..write(obj.dateOfReservation)
       ..writeByte(2)
@@ -44,7 +46,11 @@ class ReservationModelAdapter extends TypeAdapter<ReservationModel> {
       ..writeByte(6)
       ..write(obj.userName)
       ..writeByte(7)
-      ..write(obj.precipitationProbability);
+      ..write(obj.precipitationProbability)
+      ..writeByte(8)
+      ..write(obj.maxTemp)
+      ..writeByte(9)
+      ..write(obj.minTemp);
   }
 
   @override

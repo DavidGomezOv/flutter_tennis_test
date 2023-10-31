@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tennis_test/domain/models/reservation/reservation_model.dart';
 import 'package:flutter_tennis_test/domain/repositories/reservations_repository.dart';

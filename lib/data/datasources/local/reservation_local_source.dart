@@ -34,6 +34,26 @@ class ReservationLocalSource {
     return reservations;
   }
 
+  Future<void> deleteReservation({required int reservationId}) async {
+    final box = Hive.box<ReservationModel>(reservationsBox);
+    await box.delete(reservationId).catchError((onError) {
+      throw (onError);
+    });
+  }
+
+  Future<void> createReservation({required ReservationModel reservationModel}) async {
+    final box = await Hive.openBox<ReservationModel>(reservationsBox);
+    await box.add(reservationModel);
+  }
+
+  Future<CourtModel?> getCourtData({required int id}) async {
+    final box = await openCourtBox().catchError((onError) {
+      throw (onError);
+    });
+    final data = box.get(id);
+    return data;
+  }
+
   Future<List<CourtModel>> getCourts() async {
     List<CourtModel> courts = [];
     final box = await openCourtBox().catchError((onError) {
@@ -46,26 +66,6 @@ class ReservationLocalSource {
     return courts;
   }
 
-  Future<CourtModel?> getCourtData(int id) async {
-    final box = await openCourtBox().catchError((onError) {
-      throw (onError);
-    });
-    final data = box.get(id);
-    return data;
-  }
-
-  Future<void> deleteReservation(int reservationId) async {
-    final box = Hive.box<ReservationModel>(reservationsBox);
-    await box.delete(reservationId).catchError((onError) {
-      throw (onError);
-    });
-  }
-
-  Future<void> createReservation(ReservationModel reservationModel) async {
-    final box = await Hive.openBox<ReservationModel>(reservationsBox);
-    await box.add(reservationModel);
-  }
-
   Future<void> saveTestCourts() async {
     final reservations = await getCourts();
     if (reservations.isNotEmpty) {
@@ -73,20 +73,20 @@ class ReservationLocalSource {
     }
     final data = [
       CourtModel(
-        name: 'A',
+        name: 'Court A',
         lat: 10.0024,
         lng: -84.1155,
         imageUrl:
             'https://www.canvasartrocks.com/cdn/shop/products/Whole_tennis_court_Wall_Mural_Wallpaper_a_1400x.jpg?v=1578614160',
       ),
       CourtModel(
-        name: 'B',
+        name: 'Court B',
         lat: 10.0024,
         lng: -84.1155,
         imageUrl: 'https://www.austadiums.com/stadiums/photos/MCA-21.jpg',
       ),
       CourtModel(
-        name: 'C',
+        name: 'Court C',
         lat: 10.0024,
         lng: -84.1155,
         imageUrl:
