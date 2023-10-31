@@ -57,8 +57,8 @@ Future<DateTime?> showDateTimePicker({
 
   return await showDatePicker(
     context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime.now(),
+    initialDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 1),
+    firstDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 1),
     lastDate: DateTime(2023, 12, 31),
   ).then((value) async {
     if (value != null) {

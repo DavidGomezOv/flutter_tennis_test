@@ -1,12 +1,13 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_tennis_test/core/extensions/generic_extensions.dart';
 import 'package:flutter_tennis_test/core/helpers/network_helper.dart';
 import 'package:flutter_tennis_test/domain/models/precipitation/precipitation_model.dart';
-import 'package:flutter_tennis_test/domain/models/precipitation/weather_model.dart';
+import 'package:flutter_tennis_test/domain/models/precipitation/daily_weather_model.dart';
 import 'package:flutter_tennis_test/domain/models/reservation/court_model.dart';
 import 'package:flutter_tennis_test/domain/models/reservation/reservation_model.dart';
-import 'package:flutter_tennis_test/domain/repositories/precipitation_repository.dart';
+import 'package:flutter_tennis_test/domain/repositories/weather_repository.dart';
 import 'package:flutter_tennis_test/domain/repositories/reservations_repository.dart';
 
 part 'create_reservation_event.dart';
@@ -17,7 +18,7 @@ class CreateReservationBloc
     extends Bloc<CreateReservationEvent, CreateReservationState> {
   CreateReservationBloc({
     required this.reservationsRepository,
-    required this.precipitationRepository,
+    required this.weatherRepository,
   }) : super(InitialState()) {
     on<LoadCourtsEvent>(
       (event, emit) => _getCourtsData(emit),
@@ -35,9 +36,9 @@ class CreateReservationBloc
             courtName: event.courtName,
             courtImageUrl: event.courtImage,
             precipitationProbability: event.precipitationProbability,
+            maxTemp: event.maxTemp,
+            minTemp: event.minTemp,
           ),
-          maxTemperature: event.maxTemp,
-          minTemperature: event.minTemp,
         ),
       ),
     );
@@ -45,17 +46,20 @@ class CreateReservationBloc
       (event, emit) => _addReservation(event.userName, emit),
     );
     reservationModel = ReservationModel(
-        dateOfReservation: null,
-        hoursOfReservation: 1,
-        courtId: -1,
-        courtName: '',
-        courtImageUrl: '',
-        userName: '',
-        precipitationProbability: 1);
+      dateOfReservation: null,
+      hoursOfReservation: 1,
+      courtId: -1,
+      courtName: '',
+      courtImageUrl: '',
+      userName: '',
+      precipitationProbability: 1,
+      maxTemp: null,
+      minTemp: null,
+    );
   }
 
   final ReservationsRepository reservationsRepository;
-  final PrecipitationRepository precipitationRepository;
+  final WeatherRepository weatherRepository;
 
   late ReservationModel reservationModel;
 
@@ -74,6 +78,9 @@ class CreateReservationBloc
                 .dateOfReservation!
                 .add(Duration(hours: reservation.hoursOfReservation)))) {
           validDate = false;
+        } else if (reservationModel.dateOfReservation! ==
+            reservation.dateOfReservation!) {
+          validDate = false;
         } else if (reservation.dateOfReservation!.formatSimpleDate() ==
             reservationModel.dateOfReservation!.formatSimpleDate()) {
           timesReserved += 1;
@@ -81,11 +88,22 @@ class CreateReservationBloc
       }
     }
 
+    String validationError = '';
     if (validDate == false) {
-      return;
+      validationError =
+          'Court already reserved for selected date, please select another date and time';
     } else if (timesReserved >= 3) {
-      return;
+      validationError =
+          'Court reserved 3 times for selected day, please select another date and time';
     } else if (userName.isEmpty) {
+      validationError = 'Please enter a username to reserved the Court';
+    }
+
+    if (validationError.isNotEmpty) {
+      emit(UpdateValuesState(
+        reservationModel: _createReservationObject(),
+        validationError: validationError,
+      ));
       return;
     }
 
@@ -94,7 +112,7 @@ class CreateReservationBloc
     await reservationsRepository
         .createReservation(
             reservationModel: _createReservationObject(userName: userName))
-        .then((reservations) {
+        .then((_) {
       emit(const SuccessState());
     }).catchError((error) {
       emit(ErrorState(errorMessage: error.toString()));
@@ -109,6 +127,8 @@ class CreateReservationBloc
     String? courtImageUrl,
     String? userName,
     int? precipitationProbability,
+    double? maxTemp,
+    double? minTemp,
   }) {
     reservationModel = ReservationModel(
       dateOfReservation: reservationDate ?? reservationModel.dateOfReservation,
@@ -120,6 +140,8 @@ class CreateReservationBloc
       userName: userName ?? reservationModel.userName,
       precipitationProbability:
           precipitationProbability ?? reservationModel.precipitationProbability,
+      maxTemp: maxTemp ?? reservationModel.maxTemp,
+      minTemp: minTemp ?? reservationModel.minTemp,
     );
     return reservationModel;
   }
@@ -129,6 +151,7 @@ class CreateReservationBloc
 
     await NetworkHelper().validateConnection().catchError((error) {
       emit(ErrorState(errorMessage: error.toString()));
+      return false;
     });
 
     await reservationsRepository.getCourts().then((courts) {
@@ -153,13 +176,12 @@ class CreateReservationBloc
     final courtModel = await reservationsRepository.getCourtDetail(
         courtId: reservationModel.courtId);
     if (courtModel == null) return;
-    await precipitationRepository
+    await weatherRepository
         .getWeatherData(lat: courtModel.lat, lng: courtModel.lng)
         .then((weatherData) {
       final dailyWeatherData = _createDailyWeatherModel(weatherData);
       emit(LoadedWeatherReportState(
         dailyWeatherData: dailyWeatherData,
-        reportNotAvailable: dailyWeatherData == null,
       ));
     });
   }

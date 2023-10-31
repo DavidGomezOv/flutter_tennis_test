@@ -23,10 +23,12 @@ List<Widget> createCourtButtons(CreateReservationState state,
                   precipitationProbability: state is UpdateValuesState
                       ? state.reservationModel.precipitationProbability
                       : null,
-                  maxTemp:
-                      state is UpdateValuesState ? state.maxTemperature : null,
-                  minTemp:
-                      state is UpdateValuesState ? state.minTemperature : null,
+                  maxTemp: state is UpdateValuesState
+                      ? state.reservationModel.maxTemp
+                      : null,
+                  minTemp: state is UpdateValuesState
+                      ? state.reservationModel.minTemp
+                      : null,
                 ),
               );
         },
@@ -57,10 +59,12 @@ List<Widget> createTimeButtons(
                 precipitationProbability: state is UpdateValuesState
                     ? state.reservationModel.precipitationProbability
                     : null,
-                maxTemp:
-                    state is UpdateValuesState ? state.maxTemperature : null,
-                minTemp:
-                    state is UpdateValuesState ? state.minTemperature : null,
+                maxTemp: state is UpdateValuesState
+                    ? state.reservationModel.maxTemp
+                    : null,
+                minTemp: state is UpdateValuesState
+                    ? state.reservationModel.minTemp
+                    : null,
               ));
         },
         style: ButtonStyle(
