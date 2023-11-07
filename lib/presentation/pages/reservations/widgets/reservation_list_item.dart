@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tennis_test/core/extensions/generic_extensions.dart';
 import 'package:flutter_tennis_test/domain/models/reservation/reservation_model.dart';
@@ -37,27 +38,17 @@ class ReservationListItem extends StatelessWidget {
               onTap: () => onReservationTap(reservationModel),
               child: Row(
                 children: [
-                  Image.network(
-                    reservationModel.courtImageUrl,
-                    width: 160,
-                    height: 90,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: child,
-                        );
-                      }
-                      return const SizedBox(
-                        width: 160,
-                        height: 90,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      width: 160,
+                      imageUrl: reservationModel.courtImageUrl,
+                      placeholder: (context, url) => const SizedBox(
                         child: Center(
                           child: CircularProgressIndicator(),
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,

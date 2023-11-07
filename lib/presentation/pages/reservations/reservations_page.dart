@@ -66,14 +66,36 @@ class _Body extends StatelessWidget {
               itemBuilder: (context, index) => ReservationListItem(
                 reservationModel: state.reservations[index],
                 onReservationTap: (reservationModel) {
-                  showDialog(
+                  showGeneralDialog(
                     context: context,
-                    builder: (_) => DetailReservationDialog(
-                      reservationModel: state.reservations[index],
-                      onDeleteTap: () => context.read<ReservationsBloc>().add(
-                          DeleteReservationEvent(
-                              reservationId: state.reservations[index].id!)),
-                    ),
+                    barrierDismissible: true,
+                    barrierLabel: '',
+                    transitionBuilder: (context, a1, a2, widget) {
+                      return SlideTransition(
+                        position: Tween(
+                          begin: const Offset(0, 1),
+                          end: const Offset(0, 0),
+                        ).animate(a1),
+                        child: Transform.scale(
+                          scale: a1.value,
+                          child: Opacity(opacity: a1.value, child: widget),
+                        ),
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                    pageBuilder: (context, a1, a2) {
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: DetailReservationDialog(
+                          reservationModel: state.reservations[index],
+                          onDeleteTap: () => context
+                              .read<ReservationsBloc>()
+                              .add(DeleteReservationEvent(
+                                  reservationId:
+                                      state.reservations[index].id!)),
+                        ),
+                      );
+                    },
                   );
                 },
                 onDeleteTap: (int reservationId) {
